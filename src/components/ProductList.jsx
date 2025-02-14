@@ -29,71 +29,66 @@ const ProductList = () => {
   return (
     <div className="h-100">
       <h2 className="p-4 ps-0">Products List</h2>
-
       <div className="h-100 d-flex flex-column justify-content-center align-items-center w-100">
-        <table border="1" className="w-100 table table-striped">
-          <thead>
-            <tr>
-              <th>Product Id</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Stock Quantity</th>
-              <th>Category</th>
-            </tr>
-          </thead>
+        <div className="table-responsive w-100" style={{ overflowX: "auto" }}>
+          <table border="1" className="w-100 table table-striped">
+            <thead>
+              <tr>
+                <th className="text-nowrap">Product Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th className="text-nowrap">Stock Quantity</th>
+                <th>Category</th>
+              </tr>
+            </thead>
             <tbody>
               {products?.map((product) => (
-                    <tr key={product.id}>
-                      <td>{product.id}</td>
-                      <td>{product?.productName || ""}</td>
-                      <td>{product?.description || ""}</td>
-                      <td>₹{product?.price || ""}</td>
-                      <td>{product?.stockQuantity || ""}</td>
-                      <td>{product.category?.categoryName || "No Category"}</td>
-                    </tr>
-                  ))
-              }
+                <tr key={product.id}>
+                  <td>{product.id}</td>
+                  <td>{product?.productName || ""}</td>
+                  <td>{product?.description || ""}</td>
+                  <td>₹{product?.price || ""}</td>
+                  <td>{product?.stockQuantity || ""}</td>
+                  <td>{product.category?.categoryName || "No Category"}</td>
+                </tr>
+              ))}
             </tbody>
-        </table>
-        {
-          loading
-            ? (
-              <div 
-                style={{  
-                  position: 'absolute', 
-                  top: 0, 
-                  right: 0, 
-                  width: "100vw", 
-                  height: "100vh", 
-                  background: "rgba(0,0,0,0.5)"
-                }}
-                className="d-flex justify-content-center align-items-center"
-              >
-                <div class="spinner-border text-white" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div> 
-            )
-            : 
-            <></>
-          }
+          </table>
+        </div>
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(0,0,0,0.5)",
+            }}
+            className="d-flex justify-content-center align-items-center"
+          >
+            <div className="spinner-border text-white" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Pagination Controls */}
       <div className="d-flex justify-content-end mt-3">
-        <button 
-          className="btn btn-primary mx-2" 
+        <button
+          className="btn btn-primary mx-2"
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
         >
           Previous
         </button>
-        <span> Page {page} of {totalProducts/limit} </span>
-        <button 
-          className="btn btn-primary mx-2" 
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalProducts))}
-          disabled={page >= totalProducts/limit}
+        <span> Page {page} of {Math.ceil(totalProducts / limit)} </span>
+        <button
+          className="btn btn-primary mx-2"
+          onClick={() => setPage((prev) => Math.min(prev + 1, Math.ceil(totalProducts / limit)))}
+          disabled={page >= Math.ceil(totalProducts / limit)}
         >
           Next
         </button>
